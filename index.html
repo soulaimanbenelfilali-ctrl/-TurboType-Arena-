@@ -395,12 +395,13 @@
   // ضع رابط Realtime Database الخاص بك مكان الرابط أسفله
   // ==========================================
   const firebaseConfig = {
-    databaseURL: "https://YOUR-PROJECT-ID-default-rtdb.firebaseio.com/"
+    databaseURL: "https://turbotype-arena-default-rtdb.firebaseio.com/"
   };
 
   let db = null;
   try {
-    if (!firebaseConfig.databaseURL.includes("YOUR-PROJECT-ID")) {
+    if (!firebaseConfig.databaseURL.includes("turbotype-arena
+")) {
       firebase.initializeApp(firebaseConfig);
       db = firebase.database();
     }
