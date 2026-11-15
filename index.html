@@ -130,7 +130,16 @@
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(51, 65, 85, 0.6);
         }
-    </style>
+  
+</style>
+   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src=// إعدادات الاتصال السحابي
+const firebaseConfig = {
+  databaseURL: "https://turbotype-arena-default-rtdb.firebaseio.com/" 
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 </head>
 <body class="min-h-screen flex flex-col justify-between bg-gradient-to-b from-[#070b14] via-[#0d1424] to-[#090d16]">
 
