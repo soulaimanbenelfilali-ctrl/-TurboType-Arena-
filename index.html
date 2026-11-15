@@ -4,11 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>سباق الكتابة السريعة - TurboType Arena Online</title>
-  
   <!-- مكتبات Firebase للعب الجماعي المباشر (أونلاين) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&display=swap');
 
@@ -115,12 +113,6 @@
       gap: 14px;
     }
 
-    .mode-tabs {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
     .online-panel {
       display: flex;
       flex-wrap: wrap;
@@ -201,13 +193,7 @@
       top: 0;
       bottom: 0;
       width: 8px;
-      background: repeating-linear-gradient(
-        0deg,
-        #fff,
-        #fff 6px,
-        #000 6px,
-        #000 12px
-      );
+      background: repeating-linear-gradient(0deg, #fff, #fff 6px, #000 6px, #000 12px);
       opacity: 0.7;
     }
 
@@ -215,7 +201,7 @@
       position: absolute;
       right: 10px;
       font-size: 2rem;
-      transition: right 0.25s ease-out;
+      transition: right 0.25s ease-out, left 0.25s ease-out;
       z-index: 2;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
       display: flex;
@@ -317,386 +303,389 @@
   </style>
 </head>
 <body>
-
-<div class="game-container">
-  <div class="header">
-    <div class="title">🏎️ سباق الكتابة السريعة (TurboType)</div>
-    <div class="controls-top">
-      <select id="langSelect" onchange="changeLanguage()">
-        <option value="ar">العربية 🇲🇦</option>
-        <option value="en">English 🇺🇸</option>
-      </select>
-      <button class="btn-primary" onclick="startSoloRace()">سباق فردي (AI)</button>
-    </div>
-  </div>
-
-  <!-- لوحة الأونلاين وإنشاء الغرفة -->
-  <div class="lobby-box">
-    <div class="online-panel">
-      <div>
-        <button class="btn-danger" onclick="createOnlineRoom()">🌐 إنشاء غرفة أونلاين</button>
-        <span id="roomBox" style="display:none; margin-right: 8px;">
-          رمز الغرفة: <span class="room-code-display" id="roomCodeText">------</span>
-          <button onclick="copyRoomCode()" title="نسخ الرمز">📋</button>
-        </span>
-      </div>
-
-      <div class="join-group">
-        <input type="text" id="joinCodeInput" maxlength="6" placeholder="رمز الغرفة" />
-        <button class="btn-primary" onclick="joinOnlineRoom()">دخول</button>
+  <div class="game-container">
+    <div class="header">
+      <div class="title">🏎️ سباق الكتابة السريعة (TurboType)</div>
+      <div class="controls-top">
+        <select id="langSelect" onchange="changeLanguage()">
+          <option value="ar">العربية 🇲🇦</option>
+          <option value="en">English 🇺🇸</option>
+        </select>
+        <button class="btn-primary" onclick="startSoloRace()">سباق فردي (AI)</button>
       </div>
     </div>
-  </div>
 
-  <div class="status-banner" id="statusBanner">
-    اختر "سباق فردي" للتدريب، أو أنشئ غرفة أونلاين وتحدى صديقك!
-  </div>
-
-  <!-- مضمار السباق -->
-  <div class="track-area" id="trackArea">
-    <div class="finish-line"></div>
-    <div class="lane">
-      <div class="lane-label">أنت (اللاعب 1)</div>
-      <div class="car" id="player1Car">🏎️<span class="turbo-flame">🔥</span></div>
+    <!-- لوحة الأونلاين وإنشاء الغرفة -->
+    <div class="lobby-box">
+      <div class="online-panel">
+        <div>
+          <button class="btn-danger" onclick="createOnlineRoom()">🌐 إنشاء غرفة أونلاين</button>
+          <span id="roomBox" style="display:none; margin-right: 8px;">
+            رمز الغرفة: <span class="room-code-display" id="roomCodeText">------</span>
+            <button onclick="copyRoomCode()" title="نسخ الرمز">📋</button>
+          </span>
+        </div>
+        <div class="join-group">
+          <input type="text" id="joinCodeInput" maxlength="6" placeholder="رمز الغرفة" />
+          <button class="btn-primary" onclick="joinOnlineRoom()">دخول</button>
+        </div>
+      </div>
     </div>
-    <div class="lane">
-      <div class="lane-label" id="opponentLabel">المنافس (اللاعب 2 / AI)</div>
-      <div class="car" id="player2Car">🚓<span class="turbo-flame">🔥</span></div>
+
+    <div class="status-banner" id="statusBanner">
+      اختر "سباق فردي" للتدريب، أو أنشئ غرفة أونلاين وتحدى صديقك!
     </div>
+
+    <!-- مضمار السباق -->
+    <div class="track-area" id="trackArea">
+      <div class="finish-line"></div>
+      <div class="lane">
+        <div class="lane-label">أنت (اللاعب 1)</div>
+        <div class="car" id="player1Car">🏎️<span class="turbo-flame">🔥</span></div>
+      </div>
+      <div class="lane">
+        <div class="lane-label" id="opponentLabel">المنافس (اللاعب 2 / AI)</div>
+        <div class="car" id="player2Car">🚓<span class="turbo-flame">🔥</span></div>
+      </div>
+    </div>
+
+    <!-- الإحصائيات -->
+    <div class="stats-bar">
+      <div class="stat-item">السرعة: <span id="wpmDisplay">0</span> كلمة/د</div>
+      <div class="stat-item">الدقة: <span id="accDisplay">100</span>%</div>
+      <div class="stat-item">التقدم: <span id="progDisplay">0</span>%</div>
+    </div>
+
+    <!-- النص المطلوب كتابته -->
+    <div class="text-display" id="textDisplay"></div>
+
+    <!-- حقل الكتابة (يدعم الحاسوب والهاتف) -->
+    <input type="text" id="typingInput" class="typing-input" placeholder="اضغط هنا وابدأ الكتابة بسرعة..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" disabled />
   </div>
 
-  <!-- الإحصائيات -->
-  <div class="stats-bar">
-    <div class="stat-item">السرعة: <span id="wpmDisplay">0</span> كلمة/د</div>
-    <div class="stat-item">الدقة: <span id="accDisplay">100</span>%</div>
-    <div class="stat-item">التقدم: <span id="progDisplay">0</span>%</div>
-  </div>
+  <script>
+    // ==========================================
+    // 1. إعدادات قاعدة بيانات Firebase (مفعلة بالكامل وتدعم Blogger iframe)
+    // ==========================================
+    const firebaseConfig = {
+      projectId: "turbotype-arena",
+      databaseURL: "https://turbotype-arena-default-rtdb.firebaseio.com/"
+    };
 
-  <!-- النص المطلوب كتابته -->
-  <div class="text-display" id="textDisplay"></div>
-
-  <!-- حقل الكتابة (يدعم الحاسوب والهاتف) -->
-  <input
-    type="text"
-    id="typingInput"
-    class="typing-input"
-    placeholder="اضغط هنا وابدأ الكتابة بسرعة..."
-    autocomplete="off"
-    autocorrect="off"
-    autocapitalize="off"
-    spellcheck="false"
-    disabled
-  />
-</div>
-
-<script>
-  // ==========================================
-  // 1. إعدادات قاعدة بيانات Firebase (مهم جداً)
-  // ضع رابط Realtime Database الخاص بك مكان الرابط أسفله
-  // ==========================================
-  const firebaseConfig = {
-    databaseURL: "https://turbotype-arena-default-rtdb.firebaseio.com/"
-  };
-
-  let db = null;
-  try {
-    if (!firebaseConfig.databaseURL.includes("turbotype-arena
-")) {
-      firebase.initializeApp(firebaseConfig);
+    let db = null;
+    try {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      if (firebase.database.INTERNAL && firebase.database.INTERNAL.forceWebSockets) {
+        firebase.database.INTERNAL.forceWebSockets();
+      }
       db = firebase.database();
-    }
-  } catch (e) {
-    console.warn("Firebase not configured yet:", e);
-  }
-
-  // نصوص السباق
-  const texts = {
-    ar: [
-      "السرعة في الكتابة على لوحة المفاتيح مهارة رائعة تفتح لك آفاقا واسعة في العمل والدراسة وتجعلك تنجز مهامك في وقت قياسي.",
-      "كل حرف تكتبه بدقة يزيد من قوة محرك سيارتك على المضمار، حافظ على تركيزك ولا تدع الأخطاء تبطئ انطلاقتك نحو خط النهاية.",
-      "التدريب المستمر هو سر الاحتراف في كل مجال، ابدأ ببطء وركز على الدقة أولا وستجد أن سرعتك ترتفع تلقائيا يوما بعد يوم."
-    ],
-    en: [
-      "Typing fast and accurately is a superpower in the digital age. Keep your eyes on the screen and let your fingers fly across the keys.",
-      "Every correct word fuels your turbo engine on the race track. Stay focused, avoid mistakes, and cross the finish line first.",
-      "Practice makes perfect. Focus on accuracy first, and your speed will naturally increase with every race you complete."
-    ]
-  };
-
-  let currentLang = 'ar';
-  let targetText = '';
-  let startTime = null;
-  let gameActive = false;
-  let isOnline = false;
-  let currentRoomId = null;
-  let playerRole = null; // 'p1' or 'p2'
-  let aiInterval = null;
-  let aiProgress = 0;
-
-  const textDisplay = document.getElementById('textDisplay');
-  const typingInput = document.getElementById('typingInput');
-  const statusBanner = document.getElementById('statusBanner');
-
-  function changeLanguage() {
-    currentLang = document.getElementById('langSelect').value;
-    document.body.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-    typingInput.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-    if (!isOnline) startSoloRace();
-  }
-
-  function renderText(typed) {
-    let html = '';
-    for (let i = 0; i < targetText.length; i++) {
-      if (i < typed.length) {
-        if (typed[i] === targetText[i]) {
-          html += `<span class="char-correct">${targetText[i]}</span>`;
-        } else {
-          html += `<span class="char-incorrect">${targetText[i]}</span>`;
-        }
-      } else if (i === typed.length) {
-        html += `<span class="char-current">${targetText[i]}</span>`;
-      } else {
-        html += `<span>${targetText[i]}</span>`;
-      }
-    }
-    textDisplay.innerHTML = html;
-  }
-
-  function updateCarPosition(carId, percent, wpm = 0) {
-    const car = document.getElementById(carId);
-    const trackWidth = document.getElementById('trackArea').clientWidth - 75;
-    const pos = Math.min(100, Math.max(0, percent));
-    const pixels = (pos / 100) * trackWidth;
-
-    if (currentLang === 'ar') {
-      car.style.right = (10 + pixels) + 'px';
-      car.style.left = 'auto';
-    } else {
-      car.style.left = (10 + pixels) + 'px';
-      car.style.right = 'auto';
+    } catch (e) {
+      console.error("Firebase init error:", e);
     }
 
-    if (wpm >= 35) {
-      car.classList.add('turbo');
-    } else {
-      car.classList.remove('turbo');
-    }
-  }
+    // نصوص السباق
+    const texts = {
+      ar: [
+        "السرعة في الكتابة على لوحة المفاتيح مهارة رائعة تفتح لك آفاقا واسعة في العمل والدراسة وتجعلك تنجز مهامك في وقت قياسي.",
+        "كل حرف تكتبه بدقة يزيد من قوة محرك سيارتك على المضمار، حافظ على تركيزك ولا تدع الأخطاء تبطئ انطلاقتك نحو خط النهاية.",
+        "التدريب المستمر هو سر الاحتراف في كل مجال، ابدأ ببطء وركز على الدقة أولا وستجد أن سرعتك ترتفع تلقائيا يوما بعد يوم."
+      ],
+      en: [
+        "Typing fast and accurately is a superpower in the digital age. Keep your eyes on the screen and let your fingers fly across the keys.",
+        "Every correct word fuels your turbo engine on the race track. Stay focused, avoid mistakes, and cross the finish line first.",
+        "Practice makes perfect. Focus on accuracy first, and your speed will naturally increase with every race you complete."
+      ]
+    };
 
-  function resetTrack() {
-    clearInterval(aiInterval);
-    aiProgress = 0;
-    updateCarPosition('player1Car', 0, 0);
-    updateCarPosition('player2Car', 0, 0);
-    document.getElementById('wpmDisplay').textContent = '0';
-    document.getElementById('accDisplay').textContent = '100';
-    document.getElementById('progDisplay').textContent = '0';
-    typingInput.value = '';
-  }
+    let currentLang = 'ar';
+    let targetText = '';
+    let startTime = null;
+    let gameActive = false;
+    let isOnline = false;
+    let currentRoomId = null;
+    let playerRole = null; // 'p1' or 'p2'
+    let aiInterval = null;
+    let aiProgress = 0;
 
-  // ==========================
-  // الوضع الفردي ضد الذكاء الاصطناعي
-  // ==========================
-  function startSoloRace() {
-    isOnline = false;
-    currentRoomId = null;
-    document.getElementById('roomBox').style.display = 'none';
-    document.getElementById('opponentLabel').textContent = 'الذكاء الاصطناعي (AI)';
-    resetTrack();
+    const textDisplay = document.getElementById('textDisplay');
+    const typingInput = document.getElementById('typingInput');
+    const statusBanner = document.getElementById('statusBanner');
 
-    const pool = texts[currentLang];
-    targetText = pool[Math.floor(Math.random() * pool.length)];
-    renderText('');
-
-    gameActive = true;
-    startTime = null;
-    typingInput.disabled = false;
-    typingInput.focus();
-    statusBanner.textContent = '🏁 انطلق! ابدأ بكتابة النص بأقصى سرعة!';
-
-    aiInterval = setInterval(() => {
-      if (!gameActive || !startTime) return;
-      aiProgress += 0.65; // سرعة AI متوسطة
-      updateCarPosition('player2Car', aiProgress, 40);
-      if (aiProgress >= 100) {
-        endRace('للأسف! سبقك الذكاء الاصطناعي إلى خط النهاية 😅');
-      }
-    }, 200);
-  }
-
-  // ==========================
-  // وضع الأونلاين (Firebase)
-  // ==========================
-  function checkFirebaseReady() {
-    if (!db) {
-      alert('https://turbotype-arena-default-rtdb.firebaseio.com/');
-      return false;
-    }
-    return true;
-  }
-
-  function createOnlineRoom() {
-    if (!checkFirebaseReady()) return;
-    resetTrack();
-    isOnline = true;
-    playerRole = 'p1';
-    currentRoomId = Math.floor(100000 + Math.random() * 900000).toString();
-
-    const pool = texts[currentLang];
-    targetText = pool[Math.floor(Math.random() * pool.length)];
-
-    document.getElementById('roomBox').style.display = 'inline-block';
-    document.getElementById('roomCodeText').textContent = currentRoomId;
-    document.getElementById('opponentLabel').textContent = 'صديقك (اللاعب 2)';
-    statusBanner.textContent = `⏳ في انتظار دخول صديقك برمز الغرفة: ${currentRoomId} ...`;
-    typingInput.disabled = true;
-    renderText('');
-
-    const roomRef = db.ref('rooms/' + currentRoomId);
-    roomRef.set({
-      lang: currentLang,
-      text: targetText,
-      status: 'waiting',
-      p1: { progress: 0, wpm: 0 },
-      p2: { joined: false, progress: 0, wpm: 0 }
-    });
-
-    // مراقبة دخول اللاعب الثاني وتقدمه
-    roomRef.on('value', (snap) => {
-      const data = snap.val();
-      if (!data) return;
-
-      if (data.p2 && data.p2.joined && data.status === 'waiting') {
-        roomRef.update({ status: 'racing' });
-      }
-
-      if (data.status === 'racing' && !gameActive) {
-        gameActive = true;
-        startTime = Date.now();
-        typingInput.disabled = false;
-        typingInput.focus();
-        statusBanner.textContent = '🔥 انضم صديقك! السباق بدأ الآن، اكتب بسرعة!';
-      }
-
-      if (data.p2) {
-        updateCarPosition('player2Car', data.p2.progress || 0, data.p2.wpm || 0);
-        if (data.p2.progress >= 100 && gameActive) {
-          endRace('😢 فاز صديقك في هذا السباق! حاول مرة أخرى.');
-        }
-      }
-    });
-  }
-
-  function joinOnlineRoom() {
-    if (!checkFirebaseReady()) return;
-    const code = document.getElementById('joinCodeInput').value.trim();
-    if (code.length !== 6) {
-      alert('المرجو إدخال رمز غرفة صحيح مكون من 6 أرقام.');
-      return;
-    }
-
-    const roomRef = db.ref('rooms/' + code);
-    roomRef.once('value', (snap) => {
-      const data = snap.val();
-      if (!data) {
-        alert('الغرفة غير موجودة! تأكد من الرمز التسلسلي.');
-        return;
-      }
-
-      resetTrack();
-      isOnline = true;
-      playerRole = 'p2';
-      currentRoomId = code;
-      currentLang = data.lang || 'ar';
-      document.getElementById('langSelect').value = currentLang;
+    function changeLanguage() {
+      currentLang = document.getElementById('langSelect').value;
       document.body.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-      targetText = data.text;
+      typingInput.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+      if (!isOnline) startSoloRace();
+    }
+
+    function renderText(typed) {
+      let html = '';
+      for (let i = 0; i < targetText.length; i++) {
+        if (i < typed.length) {
+          if (typed[i] === targetText[i]) {
+            html += `<span class="char-correct">${targetText[i]}</span>`;
+          } else {
+            html += `<span class="char-incorrect">${targetText[i]}</span>`;
+          }
+        } else if (i === typed.length) {
+          html += `<span class="char-current">${targetText[i]}</span>`;
+        } else {
+          html += `<span>${targetText[i]}</span>`;
+        }
+      }
+      textDisplay.innerHTML = html;
+    }
+
+    function updateCarPosition(carId, percent, wpm = 0) {
+      const car = document.getElementById(carId);
+      const trackWidth = document.getElementById('trackArea').clientWidth - 75;
+      const pos = Math.min(100, Math.max(0, percent));
+      const pixels = (pos / 100) * trackWidth;
+
+      if (currentLang === 'ar') {
+        car.style.right = (10 + pixels) + 'px';
+        car.style.left = 'auto';
+      } else {
+        car.style.left = (10 + pixels) + 'px';
+        car.style.right = 'auto';
+      }
+
+      if (wpm >= 35) {
+        car.classList.add('turbo');
+      } else {
+        car.classList.remove('turbo');
+      }
+    }
+
+    function resetTrack() {
+      clearInterval(aiInterval);
+      if (currentRoomId && db) {
+        db.ref('rooms/' + currentRoomId).off();
+      }
+      aiProgress = 0;
+      updateCarPosition('player1Car', 0, 0);
+      updateCarPosition('player2Car', 0, 0);
+      document.getElementById('wpmDisplay').textContent = '0';
+      document.getElementById('accDisplay').textContent = '100';
+      document.getElementById('progDisplay').textContent = '0';
+      typingInput.value = '';
+    }
+
+    // ==========================
+    // الوضع الفردي ضد الذكاء الاصطناعي
+    // ==========================
+    function startSoloRace() {
+      resetTrack();
+      isOnline = false;
+      currentRoomId = null;
+      document.getElementById('roomBox').style.display = 'none';
+      document.getElementById('opponentLabel').textContent = 'الذكاء الاصطناعي (AI)';
+
+      const pool = texts[currentLang];
+      targetText = pool[Math.floor(Math.random() * pool.length)];
       renderText('');
 
-      document.getElementById('opponentLabel').textContent = 'صاحب الغرفة (اللاعب 1)';
-      roomRef.child('p2').update({ joined: true, progress: 0, wpm: 0 });
+      gameActive = true;
+      startTime = null;
+      typingInput.disabled = false;
+      typingInput.focus();
+      statusBanner.textContent = '🏁 انطلق! ابدأ بكتابة النص بأقصى سرعة!';
 
-      roomRef.on('value', (s) => {
-        const d = s.val();
-        if (!d) return;
+      aiInterval = setInterval(() => {
+        if (!gameActive || !startTime) return;
+        aiProgress += 0.65;
+        updateCarPosition('player2Car', aiProgress, 40);
+        if (aiProgress >= 100) {
+          endRace('للأسف! سبقك الذكاء الاصطناعي إلى خط النهاية 😅');
+        }
+      }, 200);
+    }
 
-        if (d.status === 'racing' && !gameActive) {
+    // ==========================
+    // وضع الأونلاين (Firebase)
+    // ==========================
+    function checkFirebaseReady() {
+      if (!db) {
+        statusBanner.textContent = '⚠️ تعذر الاتصال بقاعدة البيانات. تأكد من تفعيل Realtime Database في Firebase.';
+        return false;
+      }
+      return true;
+    }
+
+    function createOnlineRoom() {
+      if (!checkFirebaseReady()) return;
+      resetTrack();
+      isOnline = true;
+      gameActive = false;
+      playerRole = 'p1';
+      currentRoomId = Math.floor(100000 + Math.random() * 900000).toString();
+
+      const pool = texts[currentLang];
+      targetText = pool[Math.floor(Math.random() * pool.length)];
+
+      document.getElementById('roomBox').style.display = 'inline-block';
+      document.getElementById('roomCodeText').textContent = currentRoomId;
+      document.getElementById('opponentLabel').textContent = 'صديقك (اللاعب 2)';
+      statusBanner.textContent = `⏳ جاري إنشاء الغرفة رقم ${currentRoomId} ...`;
+      typingInput.disabled = true;
+      renderText('');
+
+      const roomRef = db.ref('rooms/' + currentRoomId);
+      roomRef.set({
+        lang: currentLang,
+        text: targetText,
+        status: 'waiting',
+        p1: { progress: 0, wpm: 0 },
+        p2: { joined: false, progress: 0, wpm: 0 }
+      }).then(() => {
+        statusBanner.textContent = `⏳ في انتظار دخول صديقك برمز الغرفة: ${currentRoomId} ...`;
+      }).catch((err) => {
+        statusBanner.textContent = '⚠️ خطأ في الصلاحيات (Rules): تأكد أن Rules في Realtime Database مضبوطة على true للـ read والـ write.';
+        console.error(err);
+      });
+
+      roomRef.on('value', (snap) => {
+        const data = snap.val();
+        if (!data) return;
+
+        if (data.p2 && data.p2.joined && data.status === 'waiting') {
+          roomRef.update({ status: 'racing' });
+        }
+
+        if (data.status === 'racing' && !gameActive) {
           gameActive = true;
           startTime = Date.now();
           typingInput.disabled = false;
           typingInput.focus();
-          statusBanner.textContent = '🔥 تم الاتصال بنجاح! السباق بدأ الآن!';
+          statusBanner.textContent = '🔥 انضم صديقك! السباق بدأ الآن، اكتب بسرعة!';
         }
 
-        if (d.p1) {
-          updateCarPosition('player2Car', d.p1.progress || 0, d.p1.wpm || 0);
-          if (d.p1.progress >= 100 && gameActive) {
-            endRace('😢 فاز صاحب الغرفة في هذا السباق!');
+        if (data.p2) {
+          updateCarPosition('player2Car', data.p2.progress || 0, data.p2.wpm || 0);
+          if (data.p2.progress >= 100 && gameActive) {
+            endRace('😢 فاز صديقك في هذا السباق! حاول مرة أخرى.');
           }
         }
       });
-    });
-  }
-
-  function copyRoomCode() {
-    navigator.clipboard.writeText(currentRoomId);
-    alert('تم نسخ رمز الغرفة: ' + currentRoomId + ' - أرسله لصديقك الآن!');
-  }
-
-  function endRace(message) {
-    gameActive = false;
-    clearInterval(aiInterval);
-    typingInput.disabled = true;
-    statusBanner.textContent = message;
-  }
-
-  // ==========================
-  // معالجة الكتابة (حاسوب + هاتف)
-  // ==========================
-  typingInput.addEventListener('input', () => {
-    if (!gameActive) return;
-    if (!startTime) startTime = Date.now();
-
-    const typed = typingInput.value;
-    renderText(typed);
-
-    // حساب الدقة والتقدم
-    let correctChars = 0;
-    for (let i = 0; i < typed.length; i++) {
-      if (typed[i] === targetText[i]) correctChars++;
     }
 
-    const accuracy = typed.length > 0 ? Math.round((correctChars / typed.length) * 100) : 100;
-    const progress = Math.min(100, Math.round((correctChars / targetText.length) * 100));
+    function joinOnlineRoom() {
+      if (!checkFirebaseReady()) return;
+      const code = document.getElementById('joinCodeInput').value.trim();
+      if (code.length !== 6) {
+        statusBanner.textContent = '⚠️ المرجو إدخال رمز غرفة صحيح مكون من 6 أرقام.';
+        return;
+      }
 
-    // حساب السرعة WPM
-    const elapsedMinutes = (Date.now() - startTime) / 60000;
-    const wordsTyped = correctChars / 5;
-    const wpm = elapsedMinutes > 0.01 ? Math.round(wordsTyped / elapsedMinutes) : 0;
+      statusBanner.textContent = '⏳ جاري البحث عن الغرفة والاتصال...';
+      const roomRef = db.ref('rooms/' + code);
 
-    document.getElementById('wpmDisplay').textContent = wpm;
-    document.getElementById('accDisplay').textContent = accuracy;
-    document.getElementById('progDisplay').textContent = progress;
+      roomRef.once('value', (snap) => {
+        const data = snap.val();
+        if (!data) {
+          statusBanner.textContent = '❌ الغرفة غير موجودة! تأكد من الرمز المكون من 6 أرقام.';
+          return;
+        }
 
-    updateCarPosition('player1Car', progress, wpm);
+        resetTrack();
+        isOnline = true;
+        gameActive = false;
+        playerRole = 'p2';
+        currentRoomId = code;
+        currentLang = data.lang || 'ar';
+        document.getElementById('langSelect').value = currentLang;
+        document.body.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+        targetText = data.text;
+        renderText('');
 
-    // تحديث البيانات في Firebase إذا كان السباق أونلاين
-    if (isOnline && db && currentRoomId) {
-      db.ref(`rooms/${currentRoomId}/${playerRole}`).update({
-        progress: progress,
-        wpm: wpm
+        document.getElementById('opponentLabel').textContent = 'صاحب الغرفة (اللاعب 1)';
+        roomRef.child('p2').update({ joined: true, progress: 0, wpm: 0 });
+
+        roomRef.on('value', (s) => {
+          const d = s.val();
+          if (!d) return;
+
+          if (d.status === 'racing' && !gameActive) {
+            gameActive = true;
+            startTime = Date.now();
+            typingInput.disabled = false;
+            typingInput.focus();
+            statusBanner.textContent = '🔥 تم الاتصال بنجاح! السباق بدأ الآن!';
+          }
+
+          if (d.p1) {
+            updateCarPosition('player2Car', d.p1.progress || 0, d.p1.wpm || 0);
+            if (d.p1.progress >= 100 && gameActive) {
+              endRace('😢 فاز صاحب الغرفة في هذا السباق!');
+            }
+          }
+        });
+      }, (err) => {
+        statusBanner.textContent = '⚠️ خطأ في الاتصال بقاعدة البيانات. تأكد من إعدادات Rules في Firebase.';
+        console.error(err);
       });
     }
 
-    // التحقق من الفوز
-    if (typed === targetText) {
-      endRace(`🏆 مبروك! فزت بالسباق بسرعة ${wpm} كلمة في الدقيقة!`);
+    function copyRoomCode() {
+      if (!currentRoomId) return;
+      navigator.clipboard.writeText(currentRoomId).then(() => {
+        statusBanner.textContent = `✅ تم نسخ رمز الغرفة (${currentRoomId}) - أرسله لصديقك الآن!`;
+      }).catch(() => {
+        prompt("انسخ رمز الغرفة:", currentRoomId);
+      });
     }
-  });
 
-  // تهيئة أولية
-  startSoloRace();
-</script>
+    function endRace(message) {
+      gameActive = false;
+      clearInterval(aiInterval);
+      typingInput.disabled = true;
+      statusBanner.textContent = message;
+    }
 
+    // ==========================
+    // معالجة الكتابة (حاسوب + هاتف)
+    // ==========================
+    typingInput.addEventListener('input', () => {
+      if (!gameActive) return;
+      if (!startTime) startTime = Date.now();
+
+      const typed = typingInput.value;
+      renderText(typed);
+
+      let correctChars = 0;
+      for (let i = 0; i < typed.length; i++) {
+        if (typed[i] === targetText[i]) correctChars++;
+      }
+
+      const accuracy = typed.length > 0 ? Math.round((correctChars / typed.length) * 100) : 100;
+      const progress = Math.min(100, Math.round((correctChars / targetText.length) * 100));
+
+      const elapsedMinutes = (Date.now() - startTime) / 60000;
+      const wordsTyped = correctChars / 5;
+      const wpm = elapsedMinutes > 0.01 ? Math.round(wordsTyped / elapsedMinutes) : 0;
+
+      document.getElementById('wpmDisplay').textContent = wpm;
+      document.getElementById('accDisplay').textContent = accuracy;
+      document.getElementById('progDisplay').textContent = progress;
+
+      updateCarPosition('player1Car', progress, wpm);
+
+      if (isOnline && db && currentRoomId) {
+        db.ref(`rooms/${currentRoomId}/${playerRole}`).update({
+          progress: progress,
+          wpm: wpm
+        });
+      }
+
+      if (typed === targetText) {
+        endRace(`🏆 مبروك! فزت بالسباق بسرعة ${wpm} كلمة في الدقيقة!`);
+      }
+    });
+
+    // تهيئة أولية
+    startSoloRace();
+  </script>
 </body>
 </html>
